@@ -1,0 +1,75 @@
+#include <iostream>
+
+using namespace std;
+
+template<typename T>
+class Node {
+public:
+    Node(T data) : data(data), next(nullptr) {}
+    T getData() const { return data; }
+    Node<T>* getNext() const { return next; }
+    void setNext(Node<T>* node) { next = node; }
+private:
+    T data;
+    Node<T>* next;
+};
+
+template<typename T>
+class Stack {
+public:
+    Stack() : top(nullptr), size(0) {}
+    ~Stack() { clear(); }
+
+    void push(T data) {
+        Node<T>* newNode = new Node<T>(data);
+        newNode->setNext(top);
+        top = newNode;
+        size++;
+    }
+
+    void pop() {
+        if (isEmpty()) {
+            cout << "Stack is empty." << endl;
+            return;
+        }
+        Node<T>* temp = top;
+        top = top->getNext();
+        delete temp;
+        size--;
+    }
+
+    T peek() const {
+        if (isEmpty()) {
+            cout << "Stack is empty." << endl;
+            return T();
+        }
+        return top->getData();
+    }
+
+    bool isEmpty() const {
+        return size == 0;
+    }
+
+    void clear() {
+        while (!isEmpty()) {
+            pop();
+        }
+    }
+
+private:
+    Node<T>* top;
+    int size;
+};
+
+int main() {
+    Stack<int> stack;
+
+    stack.push(10);
+    stack.push(20);
+    stack.push(30);
+
+    cout << "Top element: " << stack.peek() << endl;
+
+    stack.pop();
+    cout << "Top element after pop: " << stack.peek() << endl;
+}
